@@ -1,0 +1,1 @@
+tr        <- function(x) return(sum(diag(x)))

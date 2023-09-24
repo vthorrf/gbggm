@@ -1,0 +1,15 @@
+Package: gbggm
+Type: Package
+Title: gbggm: Generalized Bayesian Gaussian Graphical Models
+Version: 0.1.0
+Date: 2023-09-23
+Authors@R: c(person("Vithor", "Franco", email = "vithorfranco@gmail.com", role = c("aut", "cre")))
+Description: Provides some models based on the generalized approach to BGGMs.
+License: file LICENSE
+Encoding: UTF-8
+BugReports: https://github.com/vthorrf/gbggm/issues
+RoxygenNote: 7.1.1
+Imports: Rcpp (>= 1.0.11)
+Depends: YABS (>= 0.2.0)
+LinkingTo: Rcpp,
+           RcppArmadillo

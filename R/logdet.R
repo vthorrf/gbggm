@@ -1,0 +1,1 @@
+logdet    <- function(x) return(2 * sum(log(diag(chol(x)))))
