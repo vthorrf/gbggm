@@ -1,4 +1,4 @@
-gbggm <- function(data, reg, cor, sparse, ...) {
+bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, full=FALSE, ...) {
   ## Check what regularization method to use
   if(is.null(reg)) reg <- "normal"
   if(!{reg %in% c("normal", "laplace", "logistic", "cauchy", "t", "lomax")}) stop("Unknown regularization method!")
@@ -17,26 +17,39 @@ gbggm <- function(data, reg, cor, sparse, ...) {
   
   ## Generate data list, random initial values and select the model
   if(sparse) {
-    Data <- dataSparseFUN(X=data, V=V, N=N, reg=reg, cor=cor)
+    Data <- dataSparseFUN(data=data, V=V, N=N, reg=reg, cor=cor)
     Model <- sparseFUN(reg=reg, cor=cor)
   } else {
-    Data <- dataListFUN(X=data, V=V, N=N, reg=reg, cor=cor)
+    Data <- dataListFUN(data=data, V=V, N=N, reg=reg, cor=cor)
     Model <- modelFUN(reg=reg, cor=cor)
   }
   Initial.Values <- Data$PGF(Data)
   
   ## Fit the model and generate summaries
   fit <- MCMC(Model=Model, Data=Data, Initial.Values=Initial.Values, ...)
-  R_hat   <- get_Rhat(fit, Data)
-  Rho_hat <- pcor(R_hat)
-  sample_R_hat <- fit$Monitor[,1:{ncol(fit$Monitor)/3}]
-  sample_Rho_hat <- fit$Monitor[,{{ncol(fit$Monitor)/3}+1}:{{ncol(fit$Monitor)/3}*2}]
   # Get matrix of probability of inclusion if the estimated model is sparse
   if(sparse) {
-    sample_Delta_hat <- fit$Monitor[,{{{ncol(fit$Monitor)/3}*2}+1}:ncol(fit$Monitor)]
+    Rho_hat   <- get_Rhat(fit, Data)
+    Rho_hat[!diag(ncol(Rho_hat))] <- -Rho_hat[!diag(ncol(Rho_hat))]
+    R_hat <- tryCatch(corp(Rho_hat), error=function(e) NA)
+    if(any(is.na(R_hat))) {
+      R_hat <- get_Rhat(fit, Data)
+      Rho_hat <- pcor(R_hat)
+      sample_R_hat <- fit$Monitor[,1:ncol(R_hat)]
+      sample_Rho_hat <- fit$Monitor[,{ncol(R_hat)+1}:{ncol(R_hat)*2}]
+    } else {
+      sample_R_hat <- -fit$Monitor[,{ncol(R_hat)+1}:{ncol(R_hat)*2}]
+      sample_Rho_hat <- -fit$Monitor[,1:ncol(R_hat)]
+    }
+    sample_Delta_hat <- fit$Monitor[,{{ncol(R_hat)*2}+1}:ncol(fit$Monitor)]
     Delta_hat <- diag(V)
     Delta_hat[lower.tri(Delta_hat)] <- colMeans(sample_Delta_hat)
     Delta_hat[upper.tri(Delta_hat)] <- t(Delta_hat)[upper.tri(Delta_hat)]
+  } else {
+    R_hat   <- get_Rhat(fit, Data)
+    Rho_hat <- pcor(R_hat)
+    sample_R_hat <- fit$Monitor[,1:ncol(R_hat)]
+    sample_Rho_hat <- fit$Monitor[,{ncol(R_hat)+1}:{ncol(R_hat)*2}]
   }
   
   ## Final results
@@ -44,13 +57,17 @@ gbggm <- function(data, reg, cor, sparse, ...) {
     Results <- list("R_hat"=R_hat, "Rho_hat"=Rho_hat, "Delta_hat"=Delta_hat,
                     "sample_R_hat"=sample_R_hat,
                     "sample_Rho_hat"=sample_Rho_hat,
-                    "sample_Delta_hat"=sample_Delta_hat,
-                    "full_output"=fit)
+                    "sample_Delta_hat"=sample_Delta_hat)
+    if(full) {
+      Results$full_output <- fit
+    }
   } else {
     Results <- list("R_hat"=R_hat, "Rho_hat"=Rho_hat,
                     "sample_R_hat"=sample_R_hat,
-                    "sample_Rho_hat"=sample_Rho_hat,
-                    "full_output"=fit)
+                    "sample_Rho_hat"=sample_Rho_hat)
+    if(full) {
+      Results$full_output <- fit
+    }
   }
   class(Results) <- "bggm"
   return(Results)

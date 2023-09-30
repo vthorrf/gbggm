@@ -1,4 +1,5 @@
-dataListFUN <- function(X, V, N, reg, cor) {
+dataListFUN <- function(data, V, N, reg, cor) {
+  X <- as.matrix(data)
   if(cor == "pearson") {
     if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
       # Parameter names

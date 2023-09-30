@@ -1,20 +1,23 @@
-dataSparseFUN <- function(X, V, N, reg, cor) {
+dataSparseFUN <- function(data, V, N, reg, cor) {
+  X <- as.matrix(data)
   if(cor == "pearson") {
     if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
       # Parameter names
-      n_par <- {{V*{V-1}}/2}+2
-      parm.names <- c("lambda", "gamma",
-                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-2}),sep="_"))
+      n_par <- {{V*{V-1}}/2}+3
+      parm.names <- c("lambda", "gamma", "sigma",
+                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-3}),sep="_"))
       # Parameters positions
       pos.lambda <- grep("lambda", parm.names)
       pos.gamma  <- grep("gamma" , parm.names)
+      pos.sigma  <- grep("sigma" , parm.names)
       pos.alpha  <- grep("alpha" , parm.names)
       # Probability Generating Function
       PGF <- function(Data) {
-        lambda <- qnorm(pgamma(1,1e-2,1e-2))
+        lambda <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
         gamma  <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 2)
-        return(c(lambda, gamma, alpha))
+        sigma  <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
+        alpha  <- rnorm(Data$n_par - 3)
+        return(c(lambda, gamma, sigma, alpha))
       }
       # Density method
       if(reg=="normal") {
@@ -28,25 +31,27 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
       } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=scale(X), V=V, N=N, n_par=n_par, parm.names=parm.names, pos.gamma=pos.gamma,
-                    pos.lambda=pos.lambda, pos.alpha=pos.alpha, density=density, PGF=PGF,
-                    DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean )
+                    pos.sigma=pos.sigma, pos.lambda=pos.lambda, pos.alpha=pos.alpha, density=density,
+                    PGF=PGF, DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean )
     } else if(reg %in% c("t", "lomax")) {
       # Parameter names
-      n_par <- {{V*{V-1}}/2}+3
-      parm.names <- c("lambda", "gamma", "tau",
-                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-3}),sep="_"))
+      n_par <- {{V*{V-1}}/2}+4
+      parm.names <- c("lambda", "gamma", "tau", "sigma",
+                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-4}),sep="_"))
       # Parameters positions
       pos.lambda <- grep("lambda", parm.names)
       pos.gamma  <- grep("gamma" , parm.names)
       pos.tau    <- grep("tau"   , parm.names)
+      pos.sigma  <- grep("sigma" , parm.names)
       pos.alpha  <- grep("alpha" , parm.names)
       # Probability Generating Function
       PGF <- function(Data) {
-        lambda <- qnorm(pgamma(1,1e-2,1e-2))
+        lambda <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
         gamma  <- rnorm(1)
         tau    <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 3)
-        return(c(lambda, gamma, tau, alpha))
+        sigma  <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
+        alpha  <- rnorm(Data$n_par - 4)
+        return(c(lambda, gamma, tau, sigma, alpha))
       }
       # Density method
       if(reg=="t") {
@@ -55,8 +60,9 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
         density <- dlomax
       } else stop("Unknown regularization prior!")
       # Datalist
-      Data <- list( X=scale(X), V=V, N=N, n_par=n_par, parm.names=parm.names, pos.gamma=pos.gamma,
-                    pos.lambda=pos.lambda, pos.tau=pos.tau, pos.alpha=pos.alpha, density=density,
+      Data <- list( X=scale(X), V=V, N=N, n_par=n_par, parm.names=parm.names,
+                    pos.gamma=pos.gamma, pos.lambda=pos.lambda, pos.tau=pos.tau,
+                    pos.sigma=pos.sigma, pos.alpha=pos.alpha, density=density,
                     PGF=PGF, DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean )
       
     } else {
@@ -65,19 +71,21 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
   } else if(cor == "spearman") {
     if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
       # Parameter names
-      n_par <- {{V*{V-1}}/2}+2
-      parm.names <- c("lambda", "gamma",
-                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-2}),sep="_"))
+      n_par <- {{V*{V-1}}/2}+3
+      parm.names <- c("lambda", "gamma", "sigma",
+                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-3}),sep="_"))
       # Parameters positions
       pos.lambda <- grep("lambda", parm.names)
       pos.gamma  <- grep("gamma" , parm.names)
+      pos.sigma  <- grep("sigma" , parm.names)
       pos.alpha  <- grep("alpha" , parm.names)
       # Probability Generating Function
       PGF <- function(Data) {
-        lambda <- qnorm(pgamma(1,1e-2,1e-2))
+        lambda <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
         gamma  <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 2)
-        return(c(lambda, gamma, alpha))
+        sigma  <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
+        alpha  <- rnorm(Data$n_par - 3)
+        return(c(lambda, gamma, sigma, alpha))
       }
       # Density method
       if(reg=="normal") {
@@ -91,25 +99,27 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
       } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=scale(apply(X,2,rank)), V=V, N=N, n_par=n_par, parm.names=parm.names,
-                    pos.gamma=pos.gamma, pos.lambda=pos.lambda, pos.alpha=pos.alpha,
+                    pos.gamma=pos.gamma, pos.sigma=pos.sigma, pos.lambda=pos.lambda, pos.alpha=pos.alpha,
                     density=density, PGF=PGF, DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean )
     } else if(reg %in% c("t", "lomax")) {
       # Parameter names
-      n_par <- {{V*{V-1}}/2}+3
-      parm.names <- c("lambda", "gamma", "tau",
-                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-3}),sep="_"))
+      n_par <- {{V*{V-1}}/2}+4
+      parm.names <- c("lambda", "gamma", "tau", "sigma",
+                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-4}),sep="_"))
       # Parameters positions
       pos.lambda <- grep("lambda", parm.names)
       pos.gamma  <- grep("gamma" , parm.names)
       pos.tau    <- grep("tau"   , parm.names)
+      pos.sigma  <- grep("sigma" , parm.names)
       pos.alpha  <- grep("alpha" , parm.names)
       # Probability Generating Function
       PGF <- function(Data) {
-        lambda <- qnorm(pgamma(1,1e-2,1e-2))
+        lambda <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
         gamma  <- rnorm(1)
         tau    <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 3)
-        return(c(lambda, gamma, tau, alpha))
+        sigma  <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
+        alpha  <- rnorm(Data$n_par - 4)
+        return(c(lambda, gamma, tau, sigma, alpha))
       }
       # Density method
       if(reg=="t") {
@@ -120,8 +130,8 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
       # Datalist
       Data <- list( X=scale(apply(X,2,rank)), V=V, N=N, n_par=n_par, parm.names=parm.names,
                     pos.gamma=pos.gamma, pos.lambda=pos.lambda, pos.tau=pos.tau,
-                    pos.alpha=pos.alpha, density=density, PGF=PGF, DHN=dhalfnorm,
-                    DHC=dhalfcauchy, euclidean=euclidean )
+                    pos.sigma=pos.sigma,  pos.alpha=pos.alpha, density=density, PGF=PGF,
+                    DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean )
     } else {
       stop("Unknown regularization prior!")
     }
@@ -134,9 +144,9 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
     # Choose regularization method
     if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
       # Parameter names
-      n_par <- {{V*{V-1}}/2}+2
-      parm.names <- c("lambda", "gamma",
-                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-2}),sep="_"),
+      n_par <- {{V*{V-1}}/2}+3
+      parm.names <- c("lambda", "gamma", "sigma",
+                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-3}),sep="_"),
                       unlist(sapply(1:nrow(varPt), function(g) {
                         sapply(1:varPt[g,2], function(r) {
                           paste0("delta_var",sprintf(paste0("%0",nchar(V)+1,"d"),g),"_",r)
@@ -147,15 +157,17 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
       # Parameters positions
       pos.lambda <- grep("lambda", parm.names)
       pos.gamma  <- grep("gamma" , parm.names)
+      pos.sigma  <- grep("sigma" , parm.names)
       pos.alpha  <- grep("alpha" , parm.names)
       pos.delta  <- grep("delta" , parm.names)
       # Probability Generating Function
       PGF <- function(Data) {
-        lambda <- qnorm(pgamma(1,1e-2,1e-2))
+        lambda <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
         gamma  <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 2)
+        sigma  <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
+        alpha  <- rnorm(Data$n_par - 3)
         delta  <- rnorm(Data$n_thr) 
-        return(c(lambda, gamma, alpha, delta))
+        return(c(lambda, gamma, sigma, alpha, delta))
       }
       # Density method
       if(reg=="normal") {
@@ -173,12 +185,12 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
       Data <- list( X=X, V=V, N=N, n_par=n_par, n_thr=n_thr, parm.names=parm.names,
                     pos.gamma=pos.gamma, pos.lambda=pos.lambda, pos.alpha=pos.alpha,
                     pos.delta=pos.delta, density=density, PGF=PGF, DHN=dhalfnorm,
-                    DHC=dhalfcauchy, euclidean=euclidean, id.delta=id.delta )
+                    pos.sigma=pos.sigma, DHC=dhalfcauchy, euclidean=euclidean, id.delta=id.delta )
     } else if(reg %in% c("t", "lomax")) {
       # Parameter names
-      n_par <- {{V*{V-1}}/2}+3
-      parm.names <- c("lambda", "gamma", "tau",
-                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-3}),sep="_"),
+      n_par <- {{V*{V-1}}/2}+4
+      parm.names <- c("lambda", "gamma", "tau", "sigma",
+                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-4}),sep="_"),
                       unlist(sapply(1:nrow(varPt), function(g) {
                         sapply(1:varPt[g,2], function(r) {
                           paste0("delta_var",sprintf(paste0("%0",nchar(V)+1,"d"),g),"_",r)
@@ -189,16 +201,18 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
       pos.lambda <- grep("lambda", parm.names)
       pos.gamma  <- grep("gamma" , parm.names)
       pos.tau    <- grep("tau"   , parm.names)
+      pos.sigma  <- grep("sigma" , parm.names)
       pos.alpha  <- grep("alpha" , parm.names)
       pos.delta  <- grep("delta" , parm.names)
       # Probability Generating Function
       PGF <- function(Data) {
-        lambda <- qnorm(pgamma(1,1e-2,1e-2))
+        lambda <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
         gamma  <- rnorm(1)
         tau    <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 3)
+        sigma  <- qnorm(pgamma(runif(1,.5,1),1e-2,1e-2))
+        alpha  <- rnorm(Data$n_par - 4)
         delta  <- rnorm(Data$n_thr)
-        return(c(lambda, gamma, tau, alpha, delta))
+        return(c(lambda, gamma, tau, sigma, alpha, delta))
       }
       # Density method
       if(reg=="t") {
@@ -213,7 +227,7 @@ dataSparseFUN <- function(X, V, N, reg, cor) {
                     pos.gamma=pos.gamma, pos.lambda=pos.lambda, pos.tau=pos.tau,
                     pos.alpha=pos.alpha, pos.delta=pos.delta, density=density,
                     PGF=PGF, DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean,
-                    id.delta=id.delta )
+                    pos.sigma=pos.sigma, id.delta=id.delta )
       
     } else {
       stop("Unknown regularization prior!")

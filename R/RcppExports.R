@@ -13,6 +13,10 @@ pcor <- function(R) {
     .Call(`_gbggm_pcor`, R)
 }
 
+corp <- function(Rho) {
+    .Call(`_gbggm_corp`, Rho)
+}
+
 Modularity <- function(adjMatrix, community) {
     .Call(`_gbggm_Modularity`, adjMatrix, community)
 }

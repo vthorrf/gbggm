@@ -469,6 +469,31 @@ arma::mat pcor(arma::mat R) {
   return pcorM;
 }
 
+// [[Rcpp::export]]
+arma::mat corp(arma::mat Rho) {
+  arma::mat m(Rho.n_rows, Rho.n_cols);
+
+  for (int i = 0; i < int(m.n_rows); i++) {
+    for (int j = 0; j < int(m.n_cols); j++) {
+        if (i == j) {
+            m(i, j) = 1.0;
+        }
+        else {
+            m(i, j) = -Rho(i, j);
+        }
+    }
+  }
+
+  arma::mat InvMat = arma::inv(m);
+  arma::colvec IS(m.n_rows);
+  for (int i = 0; i < int(m.n_rows); i++) {
+    IS(i) = sqrt(1 / InvMat(i, i));
+  }
+  arma::mat RMat = diagmat(IS) * InvMat * diagmat(IS);
+
+  return RMat;
+}
+
 
 //==================== Modularity of the network
 

@@ -1,7 +1,7 @@
 [
     {
         "file": "C:/Users/vrfra/Documents/GitHub/gbggm/src/SideFunctions.cpp",
-        "file_last_write": 1695496102.0,
+        "file_last_write": 1695867721.0,
         "definitions": [
             {
                 "usr": "c:@F@count#&1$@N@std@S@vector>#I#$@N@std@S@allocator>#I#1I#1I#",
@@ -154,169 +154,12 @@
                 "hidden": false
             },
             {
-                "usr": "c:@F@Modularity#$@N@Rcpp@S@Matrix>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#$@N@Rcpp@S@Vector>#VI13#@N@Rcpp@ST>1#T@PreserveStorage#",
+                "usr": "c:@F@corp#$@N@arma@S@Mat>#d#",
                 "kind": 6,
                 "parent_name": "",
-                "name": "Modularity(Rcpp::NumericMatrix, Rcpp::IntegerVector)",
+                "name": "corp(arma::mat)",
                 "file": "C:/Users/vrfra/Documents/GitHub/gbggm/src/SideFunctions.cpp",
-                "line": 477,
-                "column": 8,
-                "hidden": false
-            }
-        ],
-        "hidden": false
-    },
-    {
-        "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-        "file_last_write": 1695496102.0,
-        "definitions": [
-            {
-                "usr": "c:@F@count#&1$@N@std@S@vector>#I#$@N@std@S@allocator>#I#1I#1I#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "count(const std::vector<int> &, const int, const int)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 20,
-                "column": 18,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@joint_frequency_table#&1$@N@std@S@vector>#I#$@N@std@S@allocator>#I#1I#1I#S0_#1I#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "joint_frequency_table(const std::vector<int> &, const int, const int, const std::vector<int> &, const int)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 36,
-                "column": 31,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@erf_inverse#d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "erf_inverse(double)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 52,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@Dnorm#d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "Dnorm(double)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 84,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@Qnorm#d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "Qnorm(double)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 90,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@MVPHI#d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "MVPHI(double)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 94,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@genz#1d#1d#1d#1d#1d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "genz(const double, const double, const double, const double, const double)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 124,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@drezner#d#d#1d#1d#d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "drezner(double, double, const double, const double, double)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 210,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@dbinorm#d#d#d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "dbinorm(double, double, double)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 272,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@pbinorm#1d#1d#1d#1d#1d#1d#1d#1d#1d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "pbinorm(const double, const double, const double, const double, const double, const double, const double, const double, const double)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 289,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@cumsum#1$@N@std@S@vector>#I#$@N@std@S@allocator>#I#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "cumsum(const std::vector<int>)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 368,
-                "column": 21,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@fpoly#d#&1$@N@std@S@vector>#d#$@N@std@S@allocator>#d#S0_#&1$@N@std@S@vector>#$@N@std@S@vector>#I#$@N@std@S@allocator>#I#$@N@std@S@allocator>#S5_#1k#1k#S0_#S0_#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "fpoly(double, const std::vector<double> &, const std::vector<double> &, const std::vector<std::vector<int>> &, const size_t, const size_t, const std::vector<double> &, const std::vector<double> &)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 374,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@dpoly#&1$@N@arma@S@Mat>#d#S1_#$@N@std@S@vector>#$@N@std@S@vector>#d#$@N@std@S@allocator>#d#$@N@std@S@allocator>#S3_#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "dpoly(const arma::mat &, arma::mat, std::vector<std::vector<double>>)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 390,
-                "column": 12,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@euclidean#$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "euclidean(Rcpp::NumericVector)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 442,
-                "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@pcor#$@N@arma@S@Mat>#d#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "pcor(arma::mat)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 447,
+                "line": 473,
                 "column": 11,
                 "hidden": false
             },
@@ -325,8 +168,8 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "Modularity(Rcpp::NumericMatrix, Rcpp::IntegerVector)",
-                "file": "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/gbggm/src/SideFunctions.cpp",
-                "line": 477,
+                "file": "C:/Users/vrfra/Documents/GitHub/gbggm/src/SideFunctions.cpp",
+                "line": 502,
                 "column": 8,
                 "hidden": false
             }

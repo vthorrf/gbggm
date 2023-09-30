@@ -46,6 +46,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// corp
+arma::mat corp(arma::mat Rho);
+RcppExport SEXP _gbggm_corp(SEXP RhoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Rho(RhoSEXP);
+    rcpp_result_gen = Rcpp::wrap(corp(Rho));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Modularity
 double Modularity(NumericMatrix adjMatrix, IntegerVector community);
 RcppExport SEXP _gbggm_Modularity(SEXP adjMatrixSEXP, SEXP communitySEXP) {
@@ -63,6 +74,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gbggm_dpoly", (DL_FUNC) &_gbggm_dpoly, 3},
     {"_gbggm_euclidean", (DL_FUNC) &_gbggm_euclidean, 1},
     {"_gbggm_pcor", (DL_FUNC) &_gbggm_pcor, 1},
+    {"_gbggm_corp", (DL_FUNC) &_gbggm_corp, 1},
     {"_gbggm_Modularity", (DL_FUNC) &_gbggm_Modularity, 2},
     {NULL, NULL, 0}
 };
