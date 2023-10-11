@@ -1,4 +1,4 @@
-\name{pcor}
+\name{_gbggm_pcor}
 \alias{pcor}
 \title{Partial correlation matrix from correlation matrix}
 \description{
@@ -27,7 +27,7 @@ b1 <- .3; b2 <- .7
 # Correlation matrix implied by the chain DAG: x1 -> x2 -> x3
 Sigma <- matrix(c(    1, b1, b1*b2,
                      b1,  1,    b2,
-                  b1*b2, b2,     1), byrow=T, nrow=3, ncol=3)
+                  b1*b2, b2,     1), byrow=TRUE, nrow=3, ncol=3)
 # The implied partial correlation matrix
 pTrue <- pcor(Sigma)
 # Recover the correlation matrix

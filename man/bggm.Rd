@@ -46,33 +46,33 @@ b1 <- .3; b2 <- .7
 # Correlation matrix implied by the chain DAG: x1 -> x2 -> x3
 Sigma <- matrix(c(    1, b1, b1*b2,
                      b1,  1,    b2,
-                  b1*b2, b2,     1), byrow=T, nrow=3, ncol=3)
+                  b1*b2, b2,     1), byrow=TRUE, nrow=3, ncol=3)
 # The implied partial correlation matrix
 pTrue <- pcor(Sigma)
 # The number of variables
 V <- ncol(Sigma)
 # Random multivariate normal data
-X <- MASS::mvrnorm(N, rep(0, V), Sigma, empirical=T)
+X <- MASS::mvrnorm(N, rep(0, V), Sigma, empirical=TRUE)
 # Dichotomization
 D <- {X > 0} * 1
 
 ### FIT GBGGMs====
 # Normal prior
-fit0 <- gbggm::bggm(D, reg="normal", cor="poly", iterations=5000, parallel=T, cores=5, nchains=5,
-                    burnin=1000, adapt=5000, status=100, thinning=1, algo="barker")
+fit0 <- gbggm::bggm(X, reg="normal", cor="pearson", iterations=1000, parallel=FALSE, cores=1,
+                    nchains=1, burnin=1000, adapt=1000, status=100, thinning=1, algo="barker")
 # Laplace prior
-fit1 <- gbggm::bggm(D, reg="laplace", cor="poly", iterations=5000, parallel=T, cores=5, nchains=5,
-                    burnin=1000, adapt=5000, status=100, thinning=1, algo="barker")
+fit1 <- gbggm::bggm(X, reg="laplace", cor="pearson", iterations=1000, parallel=FALSE, cores=1,
+                    nchains=1, burnin=1000, adapt=1000, status=100, thinning=1, algo="barker")
 # Logistic prior
-fit2 <- gbggm::bggm(D, reg="logistic", cor="poly", iterations=5000, parallel=T, cores=5, nchains=5,
-                    burnin=1000, adapt=5000, status=100, thinning=1, algo="barker")
+fit2 <- gbggm::bggm(X, reg="logistic", cor="pearson", iterations=1000, parallel=FALSE, cores=1,
+                    nchains=1, burnin=1000, adapt=1000, status=100, thinning=1, algo="barker")
 # Cauchy prior
-fit3 <- gbggm::bggm(D, reg="cauchy", cor="poly", iterations=5000, parallel=T, cores=5, nchains=5,
-                    burnin=1000, adapt=5000, status=100, thinning=1, algo="barker")
+fit3 <- gbggm::bggm(X, reg="cauchy", cor="pearson", iterations=1000, parallel=FALSE, cores=1,
+                    nchains=1, burnin=1000, adapt=1000, status=100, thinning=1, algo="barker")
 # Three-parameter t prior
-fit4 <- gbggm::bggm(D, reg="t", cor="poly", iterations=5000, parallel=T, cores=5, nchains=5,
-                    burnin=1000, adapt=5000, status=100, thinning=1, algo="barker")
+fit4 <- gbggm::bggm(X, reg="t", cor="pearson", iterations=1000, parallel=FALSE, cores=1,
+                    nchains=1, burnin=1000, adapt=1000, status=100, thinning=1, algo="barker")
 # Double lomax prior
-fit5 <- gbggm::bggm(D, reg="lomax", cor="poly", iterations=5000, parallel=T, cores=5, nchains=5,
-                    burnin=1000, adapt=5000, status=100, thinning=1, algo="barker")
+fit5 <- gbggm::bggm(X, reg="lomax", cor="pearson", iterations=1000, parallel=FALSE, cores=1,
+                    nchains=1, burnin=1000, adapt=1000, status=100, thinning=1, algo="barker")
 }
