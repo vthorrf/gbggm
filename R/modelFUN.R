@@ -1,6 +1,6 @@
 modelFUN <- function(reg, cor) {
   if(cor %in% c("pearson","spearman")) {
-    if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
+    if(reg %in% c("normal", "laplace", "logistic", "cauchy", "hypersec")) {
       Model <- function(parm, Data){
         
         ## Prior parameters
@@ -8,14 +8,14 @@ modelFUN <- function(reg, cor) {
         alpha  <- parm[Data$pos.alpha]
         
         ### Log-Priors
-        lambda.prior <- sum( Data$DHC(lambda, 0, 1, log=T) )
+        lambda.prior <- sum( dhalfcauchy(lambda, 1, log=T) )
         alpha.prior  <- sum( Data$density(alpha, 0, 1/lambda, log=T) )
         Lpp <- lambda.prior + alpha.prior
         
         ### Log-Likelihood
         C_hat <- diag(Data$V)
         C_hat[lower.tri(C_hat)] <- alpha
-        norms <- apply(C_hat, 1, Data$euclidean)
+        norms <- apply(C_hat, 1, euclidean)
         L_hat <- t(t(C_hat) %*% diag(1/norms))
         R_hat <- L_hat %*% t(L_hat)
         LL <- sum( dmnorm(Data$X, sigma=R_hat, log=T) )
@@ -34,7 +34,7 @@ modelFUN <- function(reg, cor) {
         Modelout <- list(LP=LP, Dev=-2*LL, Monitor=Monitor, parm=parm, yhat=yhat)
         return(Modelout)
       }
-    } else if (reg %in% c("t", "lomax")) {
+    } else if (reg %in% c("t", "lomax", "NEG")) {
       Model <- function(parm, Data){
         
         ## Prior parameters
@@ -43,15 +43,15 @@ modelFUN <- function(reg, cor) {
         alpha  <- parm[Data$pos.alpha]
         
         ### Log-Priors
-        lambda.prior <- sum( Data$DHC(lambda, 0, 1, log=T) )
-        tau.prior    <- sum( Data$DHC(tau, 0, 1, log=T) )
+        lambda.prior <- sum( dhalfcauchy(lambda, 1, log=T) )
+        tau.prior    <- sum( dhalfcauchy(tau, 1, log=T) )
         alpha.prior  <- sum( Data$density(alpha, 0, 1/lambda, tau, log=T) )
         Lpp <- lambda.prior + alpha.prior + tau.prior
         
         ### Log-Likelihood
         C_hat <- diag(Data$V)
         C_hat[lower.tri(C_hat)] <- alpha
-        norms <- apply(C_hat, 1, Data$euclidean)
+        norms <- apply(C_hat, 1, euclidean)
         L_hat <- t(t(C_hat) %*% diag(1/norms))
         R_hat <- L_hat %*% t(L_hat)
         LL <- sum( dmnorm(Data$X, sigma=R_hat, log=T) )
@@ -74,7 +74,7 @@ modelFUN <- function(reg, cor) {
       stop("Unknown regularization prior!")
     }
   } else if(cor == "poly") {
-    if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
+    if(reg %in% c("normal", "laplace", "logistic", "cauchy", "hypersec")) {
       Model <- function(parm, Data){
         
         ## Prior parameters
@@ -83,7 +83,7 @@ modelFUN <- function(reg, cor) {
         delta  <- parm[Data$pos.delta]
         
         ### Log-Priors
-        lambda.prior <- sum( Data$DHC(lambda, 0, 1, log=T) )
+        lambda.prior <- sum( dhalfcauchy(lambda, 1, log=T) )
         alpha.prior  <- sum( Data$density(alpha, 0, 1/lambda, log=T) )
         delta.prior  <- sum( dnorm(delta, 0, 1, log=T) )
         Lpp <- lambda.prior + alpha.prior + delta.prior
@@ -91,7 +91,7 @@ modelFUN <- function(reg, cor) {
         ### Log-Likelihood
         C_hat <- diag(Data$V)
         C_hat[lower.tri(C_hat)] <- alpha
-        norms <- apply(C_hat, 1, Data$euclidean)
+        norms <- apply(C_hat, 1, euclidean)
         L_hat <- t(t(C_hat) %*% diag(1/norms))
         R_hat <- L_hat %*% t(L_hat)
         taus <- lapply(unique(Data$id.delta), function(g) delta[which(Data$id.delta == g)])
@@ -111,7 +111,7 @@ modelFUN <- function(reg, cor) {
         Modelout <- list(LP=LP, Dev=-2*LL, Monitor=Monitor, parm=parm, yhat=yhat)
         return(Modelout)
       }
-    } else if (reg %in% c("t", "lomax")) {
+    } else if (reg %in% c("t", "lomax", "NEG")) {
       Model <- function(parm, Data){
         
         ## Prior parameters
@@ -121,8 +121,8 @@ modelFUN <- function(reg, cor) {
         delta  <- parm[Data$pos.delta]
         
         ### Log-Priors
-        lambda.prior <- sum( Data$DHC(lambda, 0, 1, log=T) )
-        tau.prior    <- sum( Data$DHC(tau, 0, 1, log=T) )
+        lambda.prior <- sum( dhalfcauchy(lambda, 1, log=T) )
+        tau.prior    <- sum( dhalfcauchy(tau, 1, log=T) )
         alpha.prior  <- sum( Data$density(alpha, 0, 1/lambda, tau, log=T) )
         delta.prior  <- sum( dnorm(delta, 0, 1, log=T) )
         Lpp <- lambda.prior + alpha.prior + tau.prior + delta.prior
@@ -130,7 +130,7 @@ modelFUN <- function(reg, cor) {
         ### Log-Likelihood
         C_hat <- diag(Data$V)
         C_hat[lower.tri(C_hat)] <- alpha
-        norms <- apply(C_hat, 1, Data$euclidean)
+        norms <- apply(C_hat, 1, euclidean)
         L_hat <- t(t(C_hat) %*% diag(1/norms))
         R_hat <- L_hat %*% t(L_hat)
         taus <- lapply(unique(Data$id.delta), function(g) delta[which(Data$id.delta == g)])

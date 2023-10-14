@@ -1,17 +1,15 @@
-ptrunc <- function (x, spec, a = -Inf, b = Inf, ...) {
-  if (a >= b) 
+ptrunc <- function (x, dist, a = -Inf, b = Inf, ...) {
+  if (a >= b) {
     stop("Lower bound a is not less than upper bound b.")
-  if (any(x < a) | any(x > b)) 
-    stop("At least one instance of (x < a) or (x > b) found.")
-  p <- x
-  aa <- rep(a, length(x))
-  bb <- rep(b, length(x))
-  G <- get(paste("p", spec, sep = ""), mode = "function")
-  p <- G(apply(cbind(apply(cbind(x, bb), 1, min), aa), 1, max), 
-         ...)
-  p <- p - G(aa, ...)
-  p <- p/{
-    G(bb, ...) - G(aa, ...)
   }
+  if (any(x < a) | any(x > b)) {
+    stop("At least one value of x is outside of the bounds.")
+  }
+  lb <- rep(a, length(x))
+  ub <- rep(b, length(x))
+  cdf <- get(paste("p", dist, sep = ""), mode = "function")
+  p <- cdf(apply(cbind(apply(cbind(x, ub), 1, min), lb), 1, max), ...)
+  p <- p - cdf(lb, ...)
+  p <- p/{cdf(ub, ...) - cdf(lb, ...)}
   return(p)
 }

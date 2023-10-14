@@ -1,7 +1,8 @@
 bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, full=FALSE, ...) {
   ## Check what regularization method to use
   if(is.null(reg)) reg <- "normal"
-  if(!{reg %in% c("normal", "laplace", "logistic", "cauchy", "t", "lomax")}) stop("Unknown regularization method!")
+  if(!{reg %in% c("normal", "laplace", "logistic", "cauchy",
+                  "hypersec", "t", "lomax", "NEG")}) stop("Unknown regularization method!")
   
   ## Check what correlation method to estimate
   if(is.null(cor)) cor <- "pearson"

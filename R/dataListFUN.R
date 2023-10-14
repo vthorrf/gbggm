@@ -1,66 +1,15 @@
 dataListFUN <- function(data, V, N, reg, cor) {
-  X <- as.matrix(data)
   if(cor == "pearson") {
-    if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
-      # Parameter names
-      n_par <- {{V*{V-1}}/2}+1
-      parm.names <- c("lambda",
-                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-1}),sep="_"))
-      # Parameters positions
-      pos.lambda <- grep("lambda", parm.names)
-      pos.alpha  <- grep("alpha" , parm.names)
-      # Probability Generating Function
-      PGF <- function(Data) {
-        lambda <- qnorm(pgamma(1,1e-2,1e-2))
-        alpha  <- rnorm(Data$n_par - 1)
-        return(c(lambda, alpha))
-      }
-      # Density method
-      if(reg=="normal") {
-        density <- dnorm
-      } else if(reg=="laplace") {
-        density <- dlaplace
-      } else if(reg=="logistic") {
-        density <- dlogis
-      } else if(reg=="cauchy") {
-        density <- dcauchy
-      } else stop("Unknown regularization prior!")
-      # Datalist
-      Data <- list( X=scale(X), V=V, N=N, n_par=n_par, parm.names=parm.names,
-                    pos.lambda=pos.lambda, pos.alpha=pos.alpha, density=density, PGF=PGF,
-                    DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean )
-    } else if(reg %in% c("t", "lomax")) {
-      # Parameter names
-      n_par <- {{V*{V-1}}/2}+2
-      parm.names <- c("lambda", "tau",
-                      paste("alpha",sprintf(paste0("%0",nchar(V)+1,"d"),1:{n_par-2}),sep="_"))
-      # Parameters positions
-      pos.lambda <- grep("lambda", parm.names)
-      pos.tau    <- grep("tau"   , parm.names)
-      pos.alpha  <- grep("alpha" , parm.names)
-      # Probability Generating Function
-      PGF <- function(Data) {
-        lambda <- qnorm(pgamma(1,1e-2,1e-2))
-        tau    <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 2)
-        return(c(lambda, tau, alpha))
-      }
-      # Density method
-      if(reg=="t") {
-        density <- d3t
-      } else if(reg=="lomax") {
-        density <- dlomax
-      } else stop("Unknown regularization prior!")
-      # Datalist
-      Data <- list( X=scale(X), V=V, N=N, n_par=n_par, parm.names=parm.names,
-                    pos.lambda=pos.lambda, pos.tau=pos.tau, pos.alpha=pos.alpha, density=density,
-                    PGF=PGF, DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean )
-      
-    } else {
-      stop("Unknown regularization prior!")
-    }
+    X <- scale(as.matrix(data))
   } else if(cor == "spearman") {
-    if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
+    X <- scale(apply(as.matrix(data),2,rank))
+  } else if(cor == "poly") {
+    X <- as.matrix(data)
+    if(min(X) > 0) X <- X - min(X)
+    if(min(X) < 0) stop("Minimum value in 'data' should be 0, but there is at least one value below 0.")
+  }
+  if(cor %in% c("pearson", "spearman")) {
+    if(reg %in% c("normal", "laplace", "logistic", "cauchy", "hypersec")) {
       # Parameter names
       n_par <- {{V*{V-1}}/2}+1
       parm.names <- c("lambda",
@@ -83,12 +32,14 @@ dataListFUN <- function(data, V, N, reg, cor) {
         density <- dlogis
       } else if(reg=="cauchy") {
         density <- dcauchy
+      } else if(reg=="hypersec") {
+        density <- dhypersec
       } else stop("Unknown regularization prior!")
       # Datalist
-      Data <- list( X=scale(apply(X,2,rank)), V=V, N=N, n_par=n_par, parm.names=parm.names,
-                    pos.lambda=pos.lambda, pos.alpha=pos.alpha,
-                    density=density, PGF=PGF, DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean )
-    } else if(reg %in% c("t", "lomax")) {
+      Data <- list( X=X, V=V, N=N, n_par=n_par,
+                    parm.names=parm.names, pos.lambda=pos.lambda,
+                    pos.alpha=pos.alpha, density=density, PGF=PGF )
+    } else if(reg %in% c("t", "lomax", "NEG")) {
       # Parameter names
       n_par <- {{V*{V-1}}/2}+2
       parm.names <- c("lambda", "tau",
@@ -109,23 +60,25 @@ dataListFUN <- function(data, V, N, reg, cor) {
         density <- d3t
       } else if(reg=="lomax") {
         density <- dlomax
+      } else if(reg=="NEG") {
+        density <- dNEG
       } else stop("Unknown regularization prior!")
       # Datalist
-      Data <- list( X=scale(apply(X,2,rank)), V=V, N=N, n_par=n_par, parm.names=parm.names,
-                    pos.lambda=pos.lambda, pos.tau=pos.tau,
-                    pos.alpha=pos.alpha, density=density, PGF=PGF, DHN=dhalfnorm,
-                    DHC=dhalfcauchy, euclidean=euclidean )
+      Data <- list( X=X, V=V, N=N, n_par=n_par, parm.names=parm.names,
+                    pos.lambda=pos.lambda, pos.tau=pos.tau, pos.alpha=pos.alpha,
+                    density=density, PGF=PGF )
+      
     } else {
       stop("Unknown regularization prior!")
     }
   } else if(cor == "poly") {
     # Threshold parameters
     thresholds <- sapply(1:ncol(X), function(g) length(unique(X[,g]))) - 1
-    if(any(thresholds > 9)) stop("At least one variable has 10 categories or more.")
+    if(any(thresholds > 9)) warning("At least one variable has 10 categories or more.")
     varPt <- cbind(1:ncol(X), thresholds)
     n_thr <- sum(thresholds)
     # Choose regularization method
-    if(reg %in% c("normal", "laplace", "logistic", "cauchy")) {
+    if(reg %in% c("normal", "laplace", "logistic", "cauchy", "hypersec")) {
       # Parameter names
       n_par <- {{V*{V-1}}/2}+1
       parm.names <- c("lambda",
@@ -157,15 +110,14 @@ dataListFUN <- function(data, V, N, reg, cor) {
         density <- dlogis
       } else if(reg=="cauchy") {
         density <- dcauchy
+      } else if(reg=="hypersec") {
+        density <- dhypersec
       } else stop("Unknown regularization prior!")
       # Datalist
-      if(min(X) > 0) X <- X - min(X)
-      if(min(X) < 0) stop("Minimum value should be 0, but a there is at least value below 0.")
       Data <- list( X=X, V=V, N=N, n_par=n_par, n_thr=n_thr, parm.names=parm.names,
                     pos.lambda=pos.lambda, pos.alpha=pos.alpha,
-                    pos.delta=pos.delta, density=density, PGF=PGF, DHN=dhalfnorm,
-                    DHC=dhalfcauchy, euclidean=euclidean, id.delta=id.delta )
-    } else if(reg %in% c("t", "lomax")) {
+                    pos.delta=pos.delta, density=density, PGF=PGF, id.delta=id.delta )
+    } else if(reg %in% c("t", "lomax", "NEG")) {
       # Parameter names
       n_par <- {{V*{V-1}}/2}+2
       parm.names <- c("lambda", "tau",
@@ -194,15 +146,14 @@ dataListFUN <- function(data, V, N, reg, cor) {
         density <- d3t
       } else if(reg=="lomax") {
         density <- dlomax
+      } else if(reg=="NEG") {
+        density <- dNEG
       } else stop("Unknown regularization prior!")
       # Datalist
-      if(min(X) > 0) X <- X - min(X)
-      if(min(X) < 0) stop("Minimum value should be 0, but a there is at least value below 0.")
       Data <- list( X=X, V=V, N=N, n_par=n_par, n_thr=n_thr, parm.names=parm.names,
                     pos.lambda=pos.lambda, pos.tau=pos.tau,
-                    pos.alpha=pos.alpha, pos.delta=pos.delta, density=density,
-                    PGF=PGF, DHN=dhalfnorm, DHC=dhalfcauchy, euclidean=euclidean,
-                    id.delta=id.delta )
+                    pos.alpha=pos.alpha, pos.delta=pos.delta,
+                    density=density, PGF=PGF, id.delta=id.delta )
       
     } else {
       stop("Unknown regularization prior!")
