@@ -1,5 +1,5 @@
 get_Rhat <- function(fit, Data) {
-  alpha <- colMeans(fit$posterior[,grep("alpha",colnames(fit$posterior))])
+  alpha <- colMeans(as.matrix(fit$posterior[,grep("alpha",colnames(fit$posterior))]))
   C_hat <- diag(Data$V)
   C_hat[lower.tri(C_hat)] <- alpha
   norms <- apply(C_hat, 1, euclidean)

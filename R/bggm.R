@@ -1,4 +1,4 @@
-bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, full=FALSE, ...) {
+bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, method=NULL, full=FALSE, ...) {
   ## Check what regularization method to use
   if(is.null(reg)) reg <- "normal"
   if(!{reg %in% c("normal", "laplace", "logistic", "cauchy",
@@ -11,6 +11,10 @@ bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, full=FALSE, ...) {
   ## Check if the model is sparse of not
   if(is.null(sparse)) sparse <- FALSE
   if(!is.logical(sparse)) stop("The `sparse` argument should be logical.")
+  
+  ## Check what estimationg method to use
+  if(is.null(method)) method <- "LA"
+  if(!{method %in% c("LA","MCMC")}) stop("Unknown estimation method!")
   
   ## Set information
   V <- ncol(data) # Number of variables
@@ -27,7 +31,11 @@ bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, full=FALSE, ...) {
   Initial.Values <- Data$PGF(Data)
   
   ## Fit the model and generate summaries
-  fit <- MCMC(Model=Model, Data=Data, Initial.Values=Initial.Values, ...)
+  if(method == "LA") {
+    fit <- LA(Model=Model, Data=Data, Initial.Values=Initial.Values, ...)
+  } else {
+    fit <- MCMC(Model=Model, Data=Data, Initial.Values=Initial.Values, ...)
+  }
   # Get matrix of probability of inclusion if the estimated model is sparse
   if(sparse) {
     Rho_hat   <- get_Rhat(fit, Data)
