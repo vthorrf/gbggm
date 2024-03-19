@@ -1,4 +1,4 @@
-bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, method=NULL, full=FALSE, ...) {
+bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, est=NULL, full=FALSE, ...) {
   ## Check what regularization method to use
   if(is.null(reg)) reg <- "normal"
   if(!{reg %in% c("normal", "laplace", "logistic", "cauchy",
@@ -13,8 +13,8 @@ bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, method=NULL, full=FALSE,
   if(!is.logical(sparse)) stop("The `sparse` argument should be logical.")
   
   ## Check what estimationg method to use
-  if(is.null(method)) method <- "LA"
-  if(!{method %in% c("LA","MCMC")}) stop("Unknown estimation method!")
+  if(is.null(est)) est <- "LA"
+  if(!{est %in% c("LA","MCMC")}) stop("Unknown estimation method!")
   
   ## Set information
   V <- ncol(data) # Number of variables
@@ -31,7 +31,7 @@ bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, method=NULL, full=FALSE,
   Initial.Values <- Data$PGF(Data)
   
   ## Fit the model and generate summaries
-  if(method == "LA") {
+  if(est == "LA") {
     fit <- LA(Model=Model, Data=Data, Initial.Values=Initial.Values, ...)
   } else {
     fit <- MCMC(Model=Model, Data=Data, Initial.Values=Initial.Values, ...)
