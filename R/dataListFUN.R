@@ -8,6 +8,7 @@ dataListFUN <- function(data, V, N, reg, cor) {
     if(min(X) > 0) X <- X - min(X)
     if(min(X) < 0) stop("Minimum value in 'data' should be 0, but there is at least one value below 0.")
   }
+  chol0 <- t(chol(cor(X)))[lower.tri(cor(X))]
   if(cor %in% c("pearson", "spearman")) {
     if(reg %in% c("normal", "laplace", "logistic", "cauchy", "hypersec")) {
       # Parameter names
@@ -20,7 +21,7 @@ dataListFUN <- function(data, V, N, reg, cor) {
       # Probability Generating Function
       PGF <- function(Data) {
         lambda <- qnorm(pgamma(1,1e-2,1e-2))
-        alpha  <- rnorm(Data$n_par - 1)
+        alpha  <- rnorm(Data$n_par - 1, mean=chol0, sd=1e-2)
         return(c(lambda, alpha))
       }
       # Density method
@@ -52,7 +53,7 @@ dataListFUN <- function(data, V, N, reg, cor) {
       PGF <- function(Data) {
         lambda <- qnorm(pgamma(1,1e-2,1e-2))
         tau    <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 2)
+        alpha  <- rnorm(Data$n_par - 2, mean=chol0, sd=1e-2)
         return(c(lambda, tau, alpha))
       }
       # Density method
@@ -97,7 +98,7 @@ dataListFUN <- function(data, V, N, reg, cor) {
       # Probability Generating Function
       PGF <- function(Data) {
         lambda <- qnorm(pgamma(1,1e-2,1e-2))
-        alpha  <- rnorm(Data$n_par - 1)
+        alpha  <- rnorm(Data$n_par - 1, mean=chol0, sd=1e-2)
         delta  <- rnorm(Data$n_thr) 
         return(c(lambda, alpha, delta))
       }
@@ -137,7 +138,7 @@ dataListFUN <- function(data, V, N, reg, cor) {
       PGF <- function(Data) {
         lambda <- qnorm(pgamma(1,1e-2,1e-2))
         tau    <- rnorm(1)
-        alpha  <- rnorm(Data$n_par - 2)
+        alpha  <- rnorm(Data$n_par - 2, mean=chol0, sd=1e-2)
         delta  <- rnorm(Data$n_thr)
         return(c(lambda, tau, alpha, delta))
       }
