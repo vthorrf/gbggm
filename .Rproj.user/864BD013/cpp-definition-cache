@@ -1,7 +1,7 @@
 [
     {
         "file": "C:/Users/vrfra/Documents/GitHub/gbggm/src/SideFunctions.cpp",
-        "file_last_write": 1710882940.0,
+        "file_last_write": 1713228272.0,
         "definitions": [
             {
                 "usr": "c:@F@count#&1$@N@std@S@vector>#I#$@N@std@S@allocator>#I#1I#1I#",
@@ -171,16 +171,6 @@
                 "file": "C:/Users/vrfra/Documents/GitHub/gbggm/src/SideFunctions.cpp",
                 "line": 501,
                 "column": 8,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@calculate_fourtuple_tetrads#$@N@Rcpp@S@Matrix>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "calculate_fourtuple_tetrads(Rcpp::NumericMatrix)",
-                "file": "C:/Users/vrfra/Documents/GitHub/gbggm/src/SideFunctions.cpp",
-                "line": 531,
-                "column": 15,
                 "hidden": false
             }
         ],

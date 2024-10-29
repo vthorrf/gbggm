@@ -31,23 +31,11 @@ dataSparseFUN <- function(data, V, N, reg, cor) {
         alpha  <- rnorm(Data$n_par - k)
         return(c(lambda, gamma, sigma, theta, alpha))
       }
-      # Density method
-      if(reg=="normal") {
-        density <- dnorm
-      } else if(reg=="laplace") {
-        density <- dlaplace
-      } else if(reg=="logistic") {
-        density <- dlogis
-      } else if(reg=="cauchy") {
-        density <- dcauchy
-      } else if(reg=="hypersec") {
-        density <- dhypersec
-      } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=X, V=V, N=N, n_par=n_par, parm.names=parm.names, pos.theta=pos.theta,
                     pos.gamma=pos.gamma, pos.sigma=pos.sigma, pos.lambda=pos.lambda,
-                    pos.alpha=pos.alpha, density=density, PGF=PGF )
-    } else if(reg %in% c("t", "lomax", "NEG")) {
+                    pos.alpha=pos.alpha, PGF=PGF )
+    } else if(reg %in% c("t", "lomax", "kaniadakis", "NEG")) {
       # Parameter names
       extra_par <- c("lambda", "gamma", "tau", "sigma", "theta")
       k <- length(extra_par)
@@ -71,20 +59,12 @@ dataSparseFUN <- function(data, V, N, reg, cor) {
         alpha  <- rnorm(Data$n_par - k)
         return(c(lambda, gamma, tau, sigma, theta, alpha))
       }
-      # Density method
-      if(reg=="t") {
-        density <- d3t
-      } else if(reg=="lomax") {
-        density <- dlomax
-      } else if(reg=="NEG") {
-        density <- dNEG
-      } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=X, V=V, N=N, n_par=n_par, pos.theta=pos.theta,
                     parm.names=parm.names, pos.gamma=pos.gamma,
                     pos.lambda=pos.lambda, pos.tau=pos.tau,
                     pos.sigma=pos.sigma, pos.alpha=pos.alpha,
-                    density=density, PGF=PGF )
+                    PGF=PGF )
       
     } else {
       stop("Unknown regularization prior!")
@@ -127,25 +107,13 @@ dataSparseFUN <- function(data, V, N, reg, cor) {
         delta  <- rnorm(Data$n_thr) 
         return(c(lambda, gamma, sigma, theta, alpha, delta))
       }
-      # Density method
-      if(reg=="normal") {
-        density <- dnorm
-      } else if(reg=="laplace") {
-        density <- dlaplace
-      } else if(reg=="logistic") {
-        density <- dlogis
-      } else if(reg=="cauchy") {
-        density <- dcauchy
-      } else if(reg=="hypersec") {
-        density <- dhypersec
-      } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=X, V=V, N=N, n_par=n_par, n_thr=n_thr, pos.theta=pos.theta,
                     parm.names=parm.names, pos.gamma=pos.gamma,
                     pos.lambda=pos.lambda, pos.alpha=pos.alpha,
-                    pos.delta=pos.delta, density=density, PGF=PGF,
+                    pos.delta=pos.delta, PGF=PGF,
                     pos.sigma=pos.sigma, id.delta=id.delta )
-    } else if(reg %in% c("t", "lomax", "NEG")) {
+    } else if(reg %in% c("t", "lomax", "kaniadakis", "NEG")) {
       # Parameter names
       extra_par <- c("lambda", "gamma", "tau", "sigma", "theta")
       k <- length(extra_par)
@@ -177,19 +145,11 @@ dataSparseFUN <- function(data, V, N, reg, cor) {
         delta  <- rnorm(Data$n_thr)
         return(c(lambda, gamma, tau, sigma, theta, alpha, delta))
       }
-      # Density method
-      if(reg=="t") {
-        density <- d3t
-      } else if(reg=="lomax") {
-        density <- dlomax
-      } else if(reg=="NEG") {
-        density <- dNEG
-      } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=X, V=V, N=N, n_par=n_par, n_thr=n_thr, parm.names=parm.names,
                     pos.gamma=pos.gamma, pos.lambda=pos.lambda, pos.tau=pos.tau,
-                    pos.alpha=pos.alpha, pos.delta=pos.delta, density=density,
-                    PGF=PGF, pos.sigma=pos.sigma, id.delta=id.delta, pos.theta=pos.theta )
+                    pos.alpha=pos.alpha, pos.delta=pos.delta, PGF=PGF,
+                    pos.sigma=pos.sigma, id.delta=id.delta, pos.theta=pos.theta )
       
     } else {
       stop("Unknown regularization prior!")

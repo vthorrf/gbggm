@@ -24,23 +24,11 @@ dataListFUN <- function(data, V, N, reg, cor) {
         alpha  <- rnorm(Data$n_par - 1, mean=chol0, sd=1e-2)
         return(c(lambda, alpha))
       }
-      # Density method
-      if(reg=="normal") {
-        density <- dnorm
-      } else if(reg=="laplace") {
-        density <- dlaplace
-      } else if(reg=="logistic") {
-        density <- dlogis
-      } else if(reg=="cauchy") {
-        density <- dcauchy
-      } else if(reg=="hypersec") {
-        density <- dhypersec
-      } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=X, V=V, N=N, n_par=n_par,
                     parm.names=parm.names, pos.lambda=pos.lambda,
-                    pos.alpha=pos.alpha, density=density, PGF=PGF )
-    } else if(reg %in% c("t", "lomax", "NEG")) {
+                    pos.alpha=pos.alpha, PGF=PGF )
+    } else if(reg %in% c("t", "lomax", "kaniadakis", "NEG")) {
       # Parameter names
       n_par <- {{V*{V-1}}/2}+2
       parm.names <- c("lambda", "tau",
@@ -56,18 +44,10 @@ dataListFUN <- function(data, V, N, reg, cor) {
         alpha  <- rnorm(Data$n_par - 2, mean=chol0, sd=1e-2)
         return(c(lambda, tau, alpha))
       }
-      # Density method
-      if(reg=="t") {
-        density <- d3t
-      } else if(reg=="lomax") {
-        density <- dlomax
-      } else if(reg=="NEG") {
-        density <- dNEG
-      } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=X, V=V, N=N, n_par=n_par, parm.names=parm.names,
-                    pos.lambda=pos.lambda, pos.tau=pos.tau, pos.alpha=pos.alpha,
-                    density=density, PGF=PGF )
+                    pos.lambda=pos.lambda, pos.tau=pos.tau,
+                    pos.alpha=pos.alpha, PGF=PGF )
       
     } else {
       stop("Unknown regularization prior!")
@@ -102,23 +82,11 @@ dataListFUN <- function(data, V, N, reg, cor) {
         delta  <- rnorm(Data$n_thr) 
         return(c(lambda, alpha, delta))
       }
-      # Density method
-      if(reg=="normal") {
-        density <- dnorm
-      } else if(reg=="laplace") {
-        density <- dlaplace
-      } else if(reg=="logistic") {
-        density <- dlogis
-      } else if(reg=="cauchy") {
-        density <- dcauchy
-      } else if(reg=="hypersec") {
-        density <- dhypersec
-      } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=X, V=V, N=N, n_par=n_par, n_thr=n_thr, parm.names=parm.names,
                     pos.lambda=pos.lambda, pos.alpha=pos.alpha,
-                    pos.delta=pos.delta, density=density, PGF=PGF, id.delta=id.delta )
-    } else if(reg %in% c("t", "lomax", "NEG")) {
+                    pos.delta=pos.delta, PGF=PGF, id.delta=id.delta )
+    } else if(reg %in% c("t", "lomax", "kaniadakis", "NEG")) {
       # Parameter names
       n_par <- {{V*{V-1}}/2}+2
       parm.names <- c("lambda", "tau",
@@ -142,19 +110,11 @@ dataListFUN <- function(data, V, N, reg, cor) {
         delta  <- rnorm(Data$n_thr)
         return(c(lambda, tau, alpha, delta))
       }
-      # Density method
-      if(reg=="t") {
-        density <- d3t
-      } else if(reg=="lomax") {
-        density <- dlomax
-      } else if(reg=="NEG") {
-        density <- dNEG
-      } else stop("Unknown regularization prior!")
       # Datalist
       Data <- list( X=X, V=V, N=N, n_par=n_par, n_thr=n_thr, parm.names=parm.names,
                     pos.lambda=pos.lambda, pos.tau=pos.tau,
                     pos.alpha=pos.alpha, pos.delta=pos.delta,
-                    density=density, PGF=PGF, id.delta=id.delta )
+                    PGF=PGF, id.delta=id.delta )
       
     } else {
       stop("Unknown regularization prior!")

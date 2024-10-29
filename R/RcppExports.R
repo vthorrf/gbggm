@@ -21,7 +21,3 @@ Modularity <- function(adjMatrix, community) {
     .Call(`_gbggm_Modularity`, adjMatrix, community)
 }
 
-calculate_fourtuple_tetrads <- function(X) {
-    .Call(`_gbggm_calculate_fourtuple_tetrads`, X)
-}
-

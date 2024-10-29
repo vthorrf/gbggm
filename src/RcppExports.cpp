@@ -69,17 +69,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// calculate_fourtuple_tetrads
-NumericVector calculate_fourtuple_tetrads(NumericMatrix X);
-RcppExport SEXP _gbggm_calculate_fourtuple_tetrads(SEXP XSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
-    rcpp_result_gen = Rcpp::wrap(calculate_fourtuple_tetrads(X));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_gbggm_dpoly", (DL_FUNC) &_gbggm_dpoly, 3},
@@ -87,7 +76,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gbggm_pcor", (DL_FUNC) &_gbggm_pcor, 1},
     {"_gbggm_corp", (DL_FUNC) &_gbggm_corp, 1},
     {"_gbggm_Modularity", (DL_FUNC) &_gbggm_Modularity, 2},
-    {"_gbggm_calculate_fourtuple_tetrads", (DL_FUNC) &_gbggm_calculate_fourtuple_tetrads, 1},
     {NULL, NULL, 0}
 };
 
