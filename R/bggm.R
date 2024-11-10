@@ -23,11 +23,10 @@ bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, est=NULL, full=FALSE, ..
   ## Generate data list, random initial values and select the model
   if(sparse) {
     Data <- dataSparseFUN(data=data, V=V, N=N, reg=reg, cor=cor)
-    Model <- sparseFUN(reg=reg, cor=cor)
   } else {
     Data <- dataListFUN(data=data, V=V, N=N, reg=reg, cor=cor)
-    Model <- modelFUN(reg=reg, cor=cor)
   }
+  Model <- modelFUN(reg=reg, cor=cor, sparse=sparse)
   Initial.Values <- Data$PGF(Data)
   
   ## Fit the model and generate summaries
@@ -39,7 +38,7 @@ bggm <- function(data, reg=NULL, cor=NULL, sparse=NULL, est=NULL, full=FALSE, ..
   # Statistical fit
   K      <- length(Data$parm.names)
   Sigma  <- cov(fit$posterior)
-  s      <- Matrix::rankMatrix(Sigma)
+  s      <- rankMatrix(Sigma)
   #lambda <- eigen(Sigma)$values
     # AIC
   AIC    <- min(fit$AIC)

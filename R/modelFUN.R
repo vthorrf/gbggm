@@ -1,22 +1,22 @@
-modelFUN <- function(reg, cor) {
+modelFUN <- function(reg, cor, sparse) {
   if(reg == "normal") {
-    Model <- modelNorm(cor=cor)
+    Model <- modelNorm(cor=cor, sparse=sparse)
   } else if(reg == "laplace") {
-    Model <- modelLaplace(cor=cor)
+    Model <- modelLaplace(cor=cor, sparse=sparse)
   } else if(reg == "logistic") {
-    Model <- modelLogistic(cor=cor)
+    Model <- modelLogistic(cor=cor, sparse=sparse)
   } else if(reg == "cauchy") {
-    Model <- modelCauchy(cor=cor)
+    Model <- modelCauchy(cor=cor, sparse=sparse)
   } else if(reg == "hypersec") {
-    Model <- modelHypersec(cor=cor)
+    Model <- modelHypersec(cor=cor, sparse=sparse)
   } else if(reg == "t") {
-    Model <- modelT(cor=cor)
+    Model <- modelT(cor=cor, sparse=sparse)
   } else if(reg == "lomax") {
-    Model <- modelLomax(cor=cor)
+    Model <- modelLomax(cor=cor, sparse=sparse)
   } else if(reg == "kaniadakis") {
-    Model <- modelKaniadakis(cor=cor)
+    Model <- modelKaniadakis(cor=cor, sparse=sparse)
   } else if(reg == "NEG") {
-    Model <- modelNEG(cor=cor)
+    Model <- modelNEG(cor=cor, sparse=sparse)
   } else {
     stop("Unkown regularization method!")
   }

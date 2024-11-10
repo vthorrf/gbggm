@@ -1,10 +1,10 @@
 Package: gbggm
 Type: Package
 Title: gbggm: Generalized Bayesian Gaussian Graphical Models
-Version: 0.1.0
-Date: 2023-09-23
+Version: 0.2.0
+Date: 2024-119-10
 Authors@R: c(person("Vithor", "Franco", email = "vithorfranco@gmail.com", role = c("aut", "cre")))
-Description: Provides some models based on the generalized approach to BGGMs.
+Description: Provides some models based on the generalized approach to BGGMs from https://doi.org/10.56296/aip00022
 License: file LICENSE
 Encoding: UTF-8
 BugReports: https://github.com/vthorrf/gbggm/issues
